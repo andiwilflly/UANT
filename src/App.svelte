@@ -1,41 +1,76 @@
 <script>
-	import Button from '@smui/button';
-	import Label from '@smui/label';
+	// Stores
+	import { user } from "./stores/user.store";
+	// Components
+	import PlayersList from './components/PlayersList.component.svelte';
+	import LoginForm from './components/LoginForm.component.svelte';
 
-	import Nested from './components/Nested.svelte';
+	let time = new Date().toLocaleString();
+	setTimeout(()=> time = new Date().toLocaleString(), 0);
 </script>
 
+<div class="content">
+<!--	<span>{ time }</span>-->
 
-<div class="bg" >
-	<div class="content">
-		Ukraine national team database
+	{#if $user === null }
+		<LoginForm />
+	{/if}
 
-		<Button on:click={()=> alert('Clicked!')}>Just a Button</Button>
-		<Button variant="raised"><Label>Raised Button, Using a Label</Label></Button>
-		<Button some-arbitrary-prop="placed on the actual button">Button</Button>
-
-		<Nested/>
-	</div>
+	{#if $user }
+		<PlayersList />
+	{/if}
 </div>
 
+<!-- white white -->
+<!-- bg #2e2f32 -->
+<!-- darkBg #191c20 -->
+<!-- green #46a146 -->
+<!-- orange #ed9c29 -->
+<!-- light-blue #5bc0de -->
+<!-- blue #0088cb -->
+<!-- red #d53e3a -->
 
 <style>
+	:global(body) {
+		background: #2e2f32;
+		font-family: 'Poppins', sans-serif;
+		color: #f0cb04;
+		font-size: 15px;
+		padding: 0;
+		height: auto;
+	}
 
-	.bg {
-		position: fixed;
-		top: 0;
-		bottom: 0;
-		right: 0;
-		left: 0;
-		opacity: 0.5;
-		background: url(ntbg.jpg);
-		background-size: cover;
+	:global(a) {
+		color: #f0cb04 !important;
+		text-decoration: underline;
+	}
+
+	:global(input) {
+		border: none;
+		outline: none;
+		width: 100%;
+	}
+
+
+	:global(button) {
+		background: #ed9c29;
+		border: none;
+		cursor: pointer;
+		color: white;
+		padding: 7px 10px;
+		transition: 0.3s opacity ease;
+	}
+
+	:global(button:hover) {
+		opacity: 0.7;
+	}
+
+	:global(span) {
+		color: gray
 	}
 
 	.content {
-		background: white;
-		padding: 10px;
-		margin: 50px auto;
-		max-width: 900px;
+		background: #191c20;
+		height: 100vh;
 	}
 </style>

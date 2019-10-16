@@ -1,0 +1,168 @@
+Pavlo Leonov, Age:21
+club: FormulaManager, country: Ukraina
+Value: 4 472 000 грн., Wage: 47 360 грн.
+magical Form, excellent Tactical discipline
+height: 189
+
+adequate stamina, hopeless keeper
+brilliant pace, magical defender
+solid technique, very good playmaker
+solid passing, average striker
+
+
+
+Lyubomyr Zhukov, age: 20, height: 173 cm
+value: 6 258 000 zł, wage: 71 500 zł
+club: Germanie-Ś.P., country: Ukraina
+brilliant form, good tactical discipline
+
+adequate stamina, magical keeper
+very good pace, poor defender
+unsatisfactory technique, poor playmaker
+average passing, poor striker
+
+
+
+Semen Yurchak, wiek: 19
+klub: MOTO JELCZ OŁAWA, kraj: Ukraina,
+wartość: 679 000 zł, wynagrodzenie: 8 500 zł,
+beznadziejna [1] forma, niedostateczna [2] dyscyplina taktyczna,
+wzrost: 163 cm, waga: 60 kg, BMI: 22.58
+kartki:
+solidna [8] kondycja beznadziejny [1] bramkarz
+celująca [10] szybkość solidny [8] obrońca
+słaba [4] technika dostateczny [6] rozgrywający
+przeciętne [5] podania znakomity [12] strzelec
+
+
+Kyrylo Yarosh, age: 17
+
+club: Pufarinii subacvatici, country: Ukraina
+value: 8 275 000 Sh
+wage: 72 500 Sh
+unearthly [16] form
+weak [4] tactical discipline
+height: 180 cm, weight: 67.1 kg, BMI: 20.71
+
+
+poor [3] stamina tragic [0] keeper
+weak [4] pace unsatisfactory [2] defender
+weak [4] technique excellent [10] playmaker
+hopeless [1] passing average [5] striker
+
+
+Artur Tarakhtiy , age 19
+value: 45 500 000 Ft
+wage: 320 000 Ft
+brilliant form
+height: 178 cm, weight: 79.6 kg,
+BMI: 25.13
+
+solid stamina tragic keeper
+formidable pace formidable defender
+adequate technique adequate playmaker
+good passing poor striker
+
+
+Tymko Avdeyinko, возраст: 19
+клуб: Liberty United, страна: Ukraina
+ценность: 1 206 400 грн.
+зарплата: 13 440 грн.
+впечатляюще [12] форма
+солидно [8] тактическая дисциплина
+рост: 189 cm, weight: 92.7 kg, BMI: 25.95
+
+плохо [3] выносливость безнадежно [1] вратарь
+солидно [8] скорость средне [5] защита
+отлично [10] техника отлично [10] полузащита
+неудовлетворительно [2] пас солидно [8] нападение
+
+
+
+
+
+Ivan Babich, возраст: 21
+клуб: Liberty United, страна: Ukraina
+ценность: 1 852 800 грн.
+зарплата: 17 920 грн.
+максимально [17] форма
+отлично [10] тактическая дисциплина
+рост: 187 cm, weight: 88 kg, BMI: 25.17
+нарушения:
+удивительно [11] выносливость безнадежно [1] вратарь
+очень хорошо [9] скорость слабо [4] защита
+отлично [10] техника хорошо [7] полузащита
+очень хорошо [9] пас неудовлетворительно [2] нападение
+
+
+
+Lyubomyr Gritsyna, возраст: 20
+клуб: Liberty United, страна: Ukraina
+ценность: 1 219 200 грн.
+зарплата: 17 760 грн.
+неудовлетворительно [2] форма
+удивительно [11] тактическая дисциплина
+рост: 182 cm, weight: 81.7 kg, BMI: 24.66
+
+удивительно [11] выносливость безнадежно [1] вратарь
+отлично [10] скорость безнадежно [1] защита
+приемлемо [6] техника удивительно [11] полузащита
+плохо [3] пас очень хорошо [9] нападение
+
+
+
+Vitaliy Kostiuk, возраст: 19
+клуб: Liberty United, страна: Ukraina
+ценность: 851 200 грн.
+зарплата: 10 400 грн.
+очень хорошо [9] форма
+слабо [4] тактическая дисциплина
+рост: 175 cm, weight: 67.8 kg, BMI: 22.14
+
+солидно [8] выносливость ужасно [0] вратарь
+неудовлетворительно [2] скорость приемлемо [6] защита
+отлично [10] техника очень хорошо [9] полузащита
+плохо [3] пас плохо [3] нападение
+
+
+
+Ustym Rozgon, возраст: 20
+клуб: Liberty United, страна: Ukraina
+ценность: 1 697 600 грн.
+зарплата: 14 720 грн.
+максимально [17] форма
+невероятно [13] тактическая дисциплина
+рост: 170 cm, weight: 65.2 kg, BMI: 22.56
+нарушения:
+очень хорошо [9] выносливость безнадежно [1] вратарь
+солидно [8] скорость очень хорошо [9] защита
+очень хорошо [9] техника очень хорошо [9] полузащита
+хорошо [7] пас средне [5] нападени
+
+
+Stanislav Yaxmanitskiy, возраст: 18
+клуб: Liberty United, страна: Ukraina
+ценность: 731 200 грн.
+зарплата: 8 000 грн.
+божественно [17] форма
+отлично [10] тактическая дисциплина
+рост: 179 cm, weight: 78.8 kg, BMI: 24.59
+
+приемлемо [6] выносливость ужасно [0] вратарь
+солидно [8] скорость средне [5] защита
+неудовлетворительно [2] техника отлично [10] полузащита
+плохо [3] пас неудовлетворительно [2] нападение
+
+
+Georgiy Zbarakh, возраст: 19
+клуб: Liberty United, страна: Ukraina
+ценность: 780 800 грн.
+зарплата: 8 640 грн.
+блестяще [14] форма
+солидно [8] тактическая дисциплина
+рост: 187 cm, weight: 72.8 kg, BMI: 20.82
+
+плохо [3] выносливость ужасно [0] вратарь
+солидно [8] скорость хорошо [7] защита
+средне [5] техника средне [5] полузащита
+солидно [8] пас солидно [8] нападение

@@ -6,7 +6,8 @@ function User() {
 
     return {
         subscribe,
-        update: (changes= {})=> update(user => ({ ...user, ...changes }))
+        signIn: (changes= {})=> update(user => changes),
+        signOut: ()=> update(user => null)
     };
 }
 

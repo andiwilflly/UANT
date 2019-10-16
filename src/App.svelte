@@ -2,28 +2,37 @@
 	// Stores
 	import { user } from "./stores/user.store";
 	// Components
-	import PlayersList from './components/PlayersList.component.svelte';
+	import PlayersList from './components/Players.component.svelte';
 	import LoginForm from './components/LoginForm.component.svelte';
 
-	let time = new Date().toLocaleString();
-	setTimeout(()=> time = new Date().toLocaleString(), 0);
+	let mounted = false;
+
+	firebase.auth().onAuthStateChanged(function(firebaseUser) {
+		if (firebaseUser) {
+			user.signIn(firebaseUser);
+			mounted = true;
+		} else {
+			user.signOut();
+			mounted = true;
+		}
+	});
 </script>
 
 <div class="content">
-<!--	<span>{ time }</span>-->
 
-	{#if $user === null }
+	{#if mounted && $user === null }
 		<LoginForm />
 	{/if}
 
-	{#if $user }
+	{#if mounted && $user }
 		<PlayersList />
+<!--		<button on:click={()=> window.firebase.auth().signOut()}>LogOut</button>-->
 	{/if}
 </div>
 
-<!-- white white -->
-<!-- bg #2e2f32 -->
-<!-- darkBg #191c20 -->
+<!-- white #a3a394 -->
+<!-- bg #2d2e31 -->
+<!-- darkBg #101215 -->
 <!-- green #46a146 -->
 <!-- orange #ed9c29 -->
 <!-- light-blue #5bc0de -->
@@ -32,12 +41,12 @@
 
 <style>
 	:global(body) {
-		background: #2e2f32;
+		background: #2d2e31;
 		font-family: 'Poppins', sans-serif;
-		color: #f0cb04;
+		color: #a3a394;
 		font-size: 15px;
 		padding: 0;
-		height: auto;
+		height: 100%;
 	}
 
 	:global(a) {
@@ -71,6 +80,8 @@
 
 	.content {
 		background: #191c20;
-		height: 100vh;
+		height: 100%;
+		box-sizing: border-box;
+		padding: 20px;
 	}
 </style>

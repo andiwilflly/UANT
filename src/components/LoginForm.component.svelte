@@ -1,38 +1,46 @@
 <script>
-    import { fade } from 'svelte/transition';
+    // Stores
+    import { user } from "../stores/user.store";
 
     let form = {
         email: '',
         password: ''
     };
 
-    let visible = false;
-
-    setTimeout(()=> visible = true, 1500);
+    let errorMsg = null;
 
     const onSubmit = (e)=> {
         e.preventDefault();
 
-        console.log(form, '???');
+        errorMsg = null;
+
+        window.firebase.auth().signInWithEmailAndPassword(form.email, form.password)
+            .then((a)=> {
+                user.signIn(window.firebase.auth().currentUser);
+            }).catch((e)=> {
+                errorMsg = e.message;
+            });
     }
 </script>
 
-{ #if visible }
-    <div class="login" transition:fade>
+<div class="login">
 
-        <div class="logo" />
+    <div class="logo" />
 
-        <div class="divider" />
+    <div class="divider" />
 
-        <div class="form">
-            <form on:submit={onSubmit}>
-                <input type="text" placeholder="email" bind:value={form.email} />
-                <input type="text" placeholder="password" bind:value={form.password} />
-                <button type="submit">Login</button>
-            </form>
-        </div>
+    <div class="form">
+        <form on:submit={onSubmit}>
+            <input type="text" placeholder="email" bind:value={form.email} />
+            <input type="text" placeholder="password" bind:value={form.password} />
+            <button type="submit" disabled={!form.email || !form.password}>Login</button>
+
+            { #if errorMsg }
+                <p class="error-msg">{errorMsg}</p>
+            {/if}
+        </form>
     </div>
-{ /if }
+</div>
 
 
 
@@ -55,13 +63,11 @@
 
     }
 
-
     .divider {
         background: #ed9c29;
         width: 1px;
         height: 300px;
     }
-
 
     .form {
         width: 50%;
@@ -71,5 +77,10 @@
 
     form {
         width: 250px;
+    }
+
+    .error-msg {
+        color: #d53e3a;
+        position: absolute;
     }
 </style>

@@ -14,6 +14,33 @@
 	<link rel='stylesheet' href='/global.css'>
 	<link rel='stylesheet' href='/bundle.css'>
 
+	<!-- The core Firebase JS SDK is always required and must be listed first -->
+	<script src="https://www.gstatic.com/firebasejs/7.2.0/firebase-app.js"></script>
+
+	<script src="https://www.gstatic.com/firebasejs/7.2.0/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.2.0/firebase-firestore.js"></script>
+
+	<script src="https://www.gstatic.com/firebasejs/7.2.0/firebase-analytics.js"></script>
+
+
+	<script>
+		// Your web app's Firebase configuration
+		var firebaseConfig = {
+			apiKey: "AIzaSyBUAEzufIo4KmtN9uTmLt7QCS4eCpmPL88",
+			authDomain: "uant-a7f1f.firebaseapp.com",
+			databaseURL: "https://uant-a7f1f.firebaseio.com",
+			projectId: "uant-a7f1f",
+			storageBucket: "uant-a7f1f.appspot.com",
+			messagingSenderId: "688980899558",
+			appId: "1:688980899558:web:0980b5f9df363042932d27",
+			measurementId: "G-6V34VTLGH4"
+		};
+		// Initialize Firebase
+		firebase.initializeApp(firebaseConfig);
+		firebase.analytics();
+	</script>
+
+
 	<script defer src='/bundle.js'></script>
 </head>
 

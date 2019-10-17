@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import uuidv1 from 'uuid/v1';
     import FIRESTORE from '../firestore';
+    import CONSTANTS from '../CONSTANTS';
     // Stores
     import players from "../stores/players.store";
 
@@ -17,8 +18,11 @@
     });
 
     const onSavePlayer = ()=> {
+        const playerHistory = { ...form, __time: Date.now() };
+
         const firebaseId = player.firebaseId || uuidv1();
         const firebasePlayerDoc = FIRESTORE.players.doc(firebaseId);
+        const historyPlayerDoc = FIRESTORE.history.doc(firebaseId);
 
         firebasePlayerDoc.get().then(doc => {
             firebasePlayerDoc.set(form)
@@ -29,11 +33,18 @@
                         players.add({ ...form, firebaseId });
                     }
                     players.select(null);
+
+                    // Save player changes to history
+                    historyPlayerDoc.get().then(doc => {
+                        historyPlayerDoc.set({
+                            history: doc.exists ? [...doc.data().history, playerHistory] : [playerHistory]
+                        })
+                    });
                 })
                 .catch(function(error) {
                     alert("Player save error: ", error);
                 });
-        })
+        });
     }
 </script>
 
@@ -46,26 +57,30 @@
     </a>
 
     <div class="player-details-form">
-        <div>
-            <label for="_id">sokker.org player ID <span style="color: #d53e3a">(required)</span></label>
+        <div style="width: 100%;">
+            <label for="_id">sokker.org player ID <span style="color: #d53e3a">(обов'язкове поле)</span></label>
             <input type="number" bind:value={form._id} />
         </div>
 
-        <div>
-            <label for="name">name</label>
+        <div style="width: 100%;">
+            <label for="name">Ім'я</label>
             <input type="text" bind:value={form.name} />
         </div>
         <div>
-            <label for="name">age</label>
+            <label for="name">Вік</label>
             <input type="number" bind:value={form.age} />
+        </div>
+        <div>
+            <label for="name">Форма</label>
+            <input type="text" bind:value={form.form} />
         </div>
 
         <div>
-            <label for="name">value</label>
+            <label for="name">Вартість</label>
             <input type="number" bind:value={form.value} />
         </div>
         <div>
-            <label for="name">wage</label>
+            <label for="name">Зарплатня</label>
             <input type="number" bind:value={form.wage} />
         </div>
 
@@ -73,12 +88,12 @@
                   margin: 10px 0px 5px 0;
                   color: rgb(237, 156, 41);
                   font-size: 18px;">
-            Skills
+            Навички
         </p>
 
-        { #each Object.keys($players.skills) as skillName (skillName) }
+        { #each Object.keys(CONSTANTS.skills) as skillName (skillName) }
             <div>
-                <label for='{skillName}'>{skillName}</label>
+                <label for='{skillName}'>{CONSTANTS.skills[skillName]}</label>
                 <input type="text" bind:value={form[skillName]} />
             </div>
         { /each }
@@ -86,8 +101,8 @@
 
     <br/>
     <div style="display: flex; justify-content: flex-end">
-        <button style="background: #46a146" on:click={onSavePlayer}>Save changes</button>&nbsp;&nbsp;&nbsp;&nbsp;
-        <button on:click={()=> players.select(null)}>Cancel editing</button>
+        <button style="background: #46a146" on:click={onSavePlayer}>Зберегти зміни</button>&nbsp;&nbsp;&nbsp;&nbsp;
+        <button on:click={()=> players.select(null)}>Завершити редагування</button>
     </div>
 </div>
 

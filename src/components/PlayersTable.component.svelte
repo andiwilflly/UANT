@@ -10,6 +10,18 @@
         });
     });
 
+    const formatter = new Intl.NumberFormat("ua", { });
+
+    const skills = {
+        'stamina': 'витривалість',
+        'keeper': 'воротарство',
+        'pace': 'швидкість',
+        'defender': 'захист',
+        'technique': 'техніка',
+        'playmaker': 'півзахист',
+        'passing': 'пас',
+        'striker': 'напад'
+    };
 
     const onPlayerDelete = (player)=> {
         const isConfirmed = confirm(`Player ${player.name} will be deleted`);
@@ -28,59 +40,44 @@
 
 
 <div class="players-table" style="">
-    <button on:click={()=> players.select('new')}>+ Add new player</button>&nbsp;&nbsp;&nbsp;&nbsp;
-    <button on:click={()=> window.firebase.auth().signOut()}>LogOut</button>
+    <button style="background: #46a146" on:click={()=> players.select('new')}>+ Add new player</button>&nbsp;&nbsp;&nbsp;&nbsp;
+    <button style="background:#d53e3a" on:click={()=> window.firebase.auth().signOut()}>LogOut</button>
     <br/>
     <br/>
 
-    <table>
-        <thead>
-            <tr>
-                <td>name</td>
-                <td>age</td>
-                <td>wage</td>
-                <td>form</td>
-
-                <td>stamina</td>
-                <td>keeper</td>
-                <td>pace</td>
-                <td>defender</td>
-                <td>technique</td>
-                <td>playmaker</td>
-                <td>passing</td>
-                <td>striker</td>
-                <td></td>
-                <td></td>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="players-list-inner">
         { #each $players.all as player (player.firebaseId) }
-            <tr class='{ $players.selected === player.firebaseId ? "active": "" }'>
-                <td>{ player.name || '' }</td>
-                <td>{ player.age || '' }</td>
-                <td>{ player.wage || '' }</td>
-                <td>{ player.form || '' }</td>
-
-                <td>{ player.stamina }</td>
-                <td>{ player.keeper }</td>
-                <td>{ player.pace }</td>
-                <td>{ player.defender }</td>
-                <td>{ player.technique }</td>
-                <td>{ player.playmaker }</td>
-                <td>{ player.passing }</td>
-                <td>{ player.striker }</td>
-
-                <td><button on:click={()=> players.select(player.firebaseId) }>Edit</button></td>
-                <td><button on:click={()=> onPlayerDelete(player) }>Delete</button></td>
-            </tr>
-        {/each}
-        </tbody>
-    </table>
+            <div class='{ $players.selected === player.firebaseId ? "player active": "player" }'>
+                <div class="player-inner">
+                    <div class="player-info">
+                        <a class="player-name"
+                           target="_blank"
+                           href='{`http://sokker.org/player/PID/${player._id}`}'>{ player.name }, { player.age }</a>
+                        <p>Вартість <span style="color: #46a146">{ formatter.format(player.value) }</span> грн.</p>
+                        <p>Зарплатня <span style="color: #46a146">{ formatter.format(player.wage) }</span> грн.</p>
+                        <p>Форма <span style="color: #ed9c29"> [ { formatter.format(player.form) } ]</span></p>
+                    </div>
+                    <div class="player-stats">
+                        { #each Object.keys(skills) as skillName (skillName) }
+                           <div>
+                               <p>{skills[skillName]}:</p>
+                               <p><span style="color: #ed9c29"> [ { player[skillName] } ]</span></p>
+                           </div>
+                        { /each }
+                    </div>
+                    <div class="player-actions">
+                        <button on:click={()=> players.select(player.firebaseId) }>Edit</button>
+                        <button style="background:#d53e3a" on:click={()=> onPlayerDelete(player) }>Delete</button>
+                    </div>
+                </div>
+            </div>
+        { /each }
+    </div>
 </div>
 
 
 <style>
-    .players-table {
+    .players-list {
         background: #101215;
         padding: 15px;
         overflow: auto;
@@ -88,21 +85,63 @@
         box-sizing: border-box;
     }
 
-    table {
+    .players-list-inner {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .player {
         width: 100%;
-        border-spacing: unset;
-    }
-
-    tr:nth-child(even) {
-        background: rgba(20, 22, 25, 0.83);
-    }
-
-    tr.active {
-        color: #f0cb04;
-    }
-
-    td {
-        border-bottom: 1px solid #2a2d31;
+        background: #101215;
+        margin: 1px 0;
         padding: 10px;
+        border: 1px solid transparent;
+    }
+
+    .player-name {
+        font-size: 17px;
+        display: inline-block;
+        margin-bottom: 10px;
+    }
+
+    .player-inner {
+        font-size: 13px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .player-info {
+        width: 30%;
+        max-width: 250px;
+    }
+
+    .player-stats {
+        width: 50%;
+        max-width: 400px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .player-stats > div {
+        width: 50%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 30px;
+        box-sizing: border-box;
+    }
+
+    .player-actions {
+        width: 200px;
+        display: flex;
+    }
+
+    .player-actions button {
+        margin: 5px;
+        height: 30px;
+        width: 100px;
+    }
+
+    .player.active p {
+        color: #5bc0de;
     }
 </style>

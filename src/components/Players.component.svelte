@@ -32,6 +32,7 @@
 
     .short {
         height: calc(100% - 300px);
+        overflow: auto;
     }
 
     .long {

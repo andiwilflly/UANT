@@ -46,7 +46,7 @@
     </a>
     <br/>
     <br/>
-    <button on:click={onSavePlayer}>Save changes</button>&nbsp;&nbsp;&nbsp;&nbsp;
+    <button style="background: #46a146" on:click={onSavePlayer}>Save changes</button>&nbsp;&nbsp;&nbsp;&nbsp;
     <button on:click={()=> players.select(null)}>Cancel editing</button>
 
     <div class="player-details-form">

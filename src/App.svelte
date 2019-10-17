@@ -49,9 +49,19 @@
 		position: relative;
 	}
 
+	:global(p) {
+		margin: 0;
+	}
+
 	:global(a) {
-		color: #f0cb04 !important;
+		color: #0088cb !important;
 		text-decoration: underline;
+		transition: 0.4s opacity ease;
+	}
+
+	:global(a:hover) {
+		opacity: 0.8;
+		text-decoration: none;
 	}
 
 	:global(input) {

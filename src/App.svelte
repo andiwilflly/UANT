@@ -2,7 +2,7 @@
 	// Stores
 	import { user } from "./stores/user.store";
 	// Components
-	import PlayersList from './components/Players.component.svelte';
+	import Players from './components/Players.component.svelte';
 	import LoginForm from './components/LoginForm.component.svelte';
 
 	let mounted = false;
@@ -19,14 +19,12 @@
 </script>
 
 <div class="content">
-
 	{#if mounted && $user === null }
 		<LoginForm />
 	{/if}
 
 	{#if mounted && $user }
-		<PlayersList />
-<!--		<button on:click={()=> window.firebase.auth().signOut()}>LogOut</button>-->
+		<Players />
 	{/if}
 </div>
 
@@ -47,6 +45,8 @@
 		font-size: 15px;
 		padding: 0;
 		height: 100%;
+		overflow: hidden;
+		position: relative;
 	}
 
 	:global(a) {

@@ -1,4 +1,5 @@
 <script>
+    import { fade } from 'svelte/transition';
     // Stores
     import { user } from "../stores/user.store";
 
@@ -23,7 +24,7 @@
     }
 </script>
 
-<div class="login">
+<div class="login" transition:fade>
 
     <div class="logo" />
 
@@ -32,7 +33,7 @@
     <div class="form">
         <form on:submit={onSubmit}>
             <input type="text" placeholder="email" bind:value={form.email} />
-            <input type="text" placeholder="password" bind:value={form.password} />
+            <input type="password" placeholder="password" bind:value={form.password} />
             <button type="submit" disabled={!form.email || !form.password}>Login</button>
 
             { #if errorMsg }

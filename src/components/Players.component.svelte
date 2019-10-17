@@ -24,7 +24,6 @@
 
 
 <style>
-
     .players {
         height: 100%;
         padding: 0;

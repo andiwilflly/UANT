@@ -46,16 +46,13 @@
     </a>
     <br/>
     <br/>
-    <button on:click={onSavePlayer}>Save changes</button>
+    <button on:click={onSavePlayer}>Save changes</button>&nbsp;&nbsp;&nbsp;&nbsp;
+    <button on:click={()=> players.select(null)}>Cancel editing</button>
 
     <div class="player-details-form">
         <div>
             <label for="name">name</label>
             <input type="text" placeholder="name" bind:value={form.name} />
-        </div>
-        <div>
-            <label for="name">country</label>
-            <input type="text" placeholder="country" bind:value={form.country} />
         </div>
         <div>
             <label for="name">age</label>

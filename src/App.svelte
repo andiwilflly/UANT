@@ -45,7 +45,7 @@
 		font-size: 15px;
 		padding: 0;
 		height: 100%;
-		overflow: hidden;
+		overflow-y: scroll;
 		position: relative;
 	}
 
@@ -92,6 +92,5 @@
 		background: #191c20;
 		height: 100%;
 		box-sizing: border-box;
-		padding: 20px;
 	}
 </style>

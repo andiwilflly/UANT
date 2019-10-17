@@ -10,7 +10,7 @@
 
 <div class="players">
 
-    <div class='{ $players.selected ? "short" : "long" }'>
+    <div style="padding: 10px;" class='{ $players.selected ? "short" : "long" }'>
         <PlayersTable />
     </div>
 
@@ -25,23 +25,24 @@
 
 <style>
     .players {
-        height: 100%;
-        padding: 0;
+        background: #101215;
+        width: 100%;
+        display: flex;
         position: relative;
     }
 
     .short {
-        height: calc(100% - 300px);
+        width: calc(100% - 400px);
         overflow: auto;
     }
 
     .long {
-        height: 100%;
+        width: 100%;
     }
 
     .player-details-wrapper {
-        margin-top: 15px;
-        height: calc(300px - 15px);
+        width: calc(400px);
+        margin: 79px 10px 10px 0;
     }
 
 </style>

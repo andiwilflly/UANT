@@ -12,17 +12,6 @@
 
     const formatter = new Intl.NumberFormat("ua", { });
 
-    const skills = {
-        'stamina': 'витривалість',
-        'keeper': 'воротарство',
-        'pace': 'швидкість',
-        'defender': 'захист',
-        'technique': 'техніка',
-        'playmaker': 'півзахист',
-        'passing': 'пас',
-        'striker': 'напад'
-    };
-
     const onPlayerDelete = (player)=> {
         const isConfirmed = confirm(`Player ${player.name} will be deleted`);
         if(!isConfirmed) return;
@@ -55,13 +44,13 @@
                            href='{`http://sokker.org/player/PID/${player._id}`}'>{ player.name }, { player.age }</a>
                         <p>Вартість <span style="color: #46a146">{ formatter.format(player.value) }</span> грн.</p>
                         <p>Зарплатня <span style="color: #46a146">{ formatter.format(player.wage) }</span> грн.</p>
-                        <p>Форма <span style="color: #ed9c29"> [ { formatter.format(player.form) } ]</span></p>
+                        <p>Форма [&nbsp;<span style="color: #ed9c29">{ formatter.format(player.form) }</span>&nbsp;]</p>
                     </div>
                     <div class="player-stats">
-                        { #each Object.keys(skills) as skillName (skillName) }
+                        { #each Object.keys($players.skills) as skillName (skillName) }
                            <div>
-                               <p>{skills[skillName]}:</p>
-                               <p><span style="color: #ed9c29"> [ { player[skillName] } ]</span></p>
+                               <p>{$players.skills[skillName]}:</p>
+                               <p>[&nbsp;<span style="color: #ed9c29"> { player[skillName] }</span>&nbsp;]</p>
                            </div>
                         { /each }
                     </div>
@@ -78,7 +67,6 @@
 
 <style>
     .players-list {
-        background: #101215;
         padding: 15px;
         overflow: auto;
         height: 100%;
@@ -92,7 +80,7 @@
 
     .player {
         width: 100%;
-        background: #101215;
+        background: #2d2e31;
         margin: 1px 0;
         padding: 10px;
         border: 1px solid transparent;
@@ -141,7 +129,7 @@
         width: 100px;
     }
 
-    .player.active p {
-        color: #5bc0de;
+    .player.active {
+        background: #101215;
     }
 </style>

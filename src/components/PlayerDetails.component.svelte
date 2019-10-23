@@ -66,13 +66,9 @@
             <label for="name">Ім'я</label>
             <input type="text" bind:value={form.name} />
         </div>
-        <div>
+        <div style="width: 100%;">
             <label for="name">Вік</label>
-            <input type="number" bind:value={form.age} />
-        </div>
-        <div>
-            <label for="name">Форма</label>
-            <input type="text" bind:value={form.form} />
+            <input style="width: 181px" type="number" bind:value={form.age} />
         </div>
 
         <div>
@@ -82,6 +78,15 @@
         <div>
             <label for="name">Зарплатня</label>
             <input type="number" bind:value={form.wage} />
+        </div>
+
+        <div>
+            <label for="name">Форма</label>
+            <input type="text" bind:value={form.form} />
+        </div>
+        <div>
+            <label for="name">Тактична дисципліна</label>
+            <input type="number" bind:value={form.tactic} />
         </div>
 
         <p style="width: 100%;
@@ -100,7 +105,7 @@
     </div>
 
     <br/>
-    <div style="display: flex; justify-content: flex-end">
+    <div style="display: flex; justify-content: space-between">
         <button style="background: #46a146" on:click={onSavePlayer}>Зберегти зміни</button>&nbsp;&nbsp;&nbsp;&nbsp;
         <button on:click={()=> players.select(null)}>Завершити редагування</button>
     </div>
@@ -126,8 +131,5 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
-    }
-
-    .player-details-form > div {
     }
 </style>

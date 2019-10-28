@@ -8,7 +8,26 @@
 
     $: player = $players.all.find(player => player.firebaseId === $players.selected) || { };
 
-    let form = { };
+    let form = {};
+    const fieldsNames = [
+        "name",
+        "country",
+        "training",
+        "_id",
+        "age",
+        "form",
+        "stamina",
+        "keeper",
+        "pace",
+        "defender",
+        "technique",
+        "playmaker",
+        "passing",
+        "striker"
+    ];
+
+    $: isDisabledForm = !!fieldsNames.find(fieldName => !form[fieldName]);
+
 
     onMount(()=> {
         form = player;
@@ -17,10 +36,6 @@
         });
     });
 
-
-    const isDisabledForm = ()=> {
-        return Object.values(form)
-    };
 
     const onSavePlayer = ()=> {
         const playerHistory = { ...form, __time: Date.now() };
@@ -32,6 +47,7 @@
         firebasePlayerDoc.get().then(doc => {
             firebasePlayerDoc.set(form)
                 .then(function(p) {
+                    if($players.selected === 'offer') alert("Кандидата до збірної успішно додано. Дякуємо за допомогу!");
                     if($players.selected === 'offer') return players.select(null); // No history for offer player
 
                     if(doc.exists) {
@@ -65,39 +81,67 @@
 
     <div class="player-details-form">
         <div style="width: 100%;">
-            <label for="_id">sokker.org player ID <span style="color: #d53e3a">(обов'язкове поле)</span></label>
+            <label for="name">
+                { #if form._id !== '' && form._id !== undefined }
+                    sokker.org player ID <span style="color: #46a146">✔</span>
+                { :else }
+                    sokker.org player ID <span style="color: #d53e3a">⚠</span>
+                { /if}
+            </label>
             <input type="number" bind:value={form._id} />
         </div>
 
+        <div>
+            <label for="training">
+                { #if form.training !== '' && form.training !== undefined }
+                    Тренує зараз <span style="color: #46a146">✔</span>
+                { :else }
+                    Тренує зараз <span style="color: #d53e3a">⚠</span>
+                { /if}
+            </label>
+            <select bind:value={form.training}>
+                <option value="">&nbsp;</option>
+                <option value="невідомо">невідомо</option>
+                { #each Object.keys(CONSTANTS.skills) as skillName (skillName) }
+                    <option value={skillName}>{CONSTANTS.skills[skillName]}</option>
+                {/each }
+            </select>
+        </div>
+
         <div style="width: 100%;">
-            <label for="name">Ім'я</label>
+            <label for="name">
+                { #if form.name !== '' && form.name !== undefined }
+                    Ім'я <span style="color: #46a146">✔</span>
+                { :else }
+                    Ім'я <span style="color: #d53e3a">⚠</span>
+                { /if}
+            </label>
             <input type="text" bind:value={form.name} />
         </div>
-        <div style="width: 100%;">
-            <label for="name">Вік</label>
+        <div>
+            <label for="name">
+                { #if form.age !== '' && form.age !== undefined }
+                    Вік <span style="color: #46a146">✔</span>
+                { :else }
+                    Вік <span style="color: #d53e3a">⚠</span>
+                { /if}
+            </label>
             <input style="width: 181px" type="number" bind:value={form.age} />
         </div>
 
         <div>
-            <label for="name">Вартість</label>
-            <input type="number" bind:value={form.value} />
-        </div>
-        <div>
-            <label for="name">Зарплатня</label>
-            <input type="number" bind:value={form.wage} />
-        </div>
-
-        <div>
-            <label for="name">Форма</label>
+            <label for="name">
+                { #if form.form !== '' && form.form !== undefined }
+                    Форма <span style="color: #46a146">✔</span>
+                { :else }
+                    Форма <span style="color: #d53e3a">⚠</span>
+                { /if}
+            </label>
             <input type="text" bind:value={form.form} />
-        </div>
-        <div>
-            <label for="name">Тактична дисципліна</label>
-            <input type="number" bind:value={form.tactic} />
         </div>
 
         <p style="width: 100%;
-                  margin: 10px 0px 5px 0;
+                  margin: 10px 0 5px 0;
                   color: rgb(237, 156, 41);
                   font-size: 18px;">
             Навички
@@ -105,7 +149,13 @@
 
         { #each Object.keys(CONSTANTS.skills) as skillName (skillName) }
             <div>
-                <label for='{skillName}'>{CONSTANTS.skills[skillName]}</label>
+                <label for="name">
+                    { #if form[skillName] !== '' && form[skillName] !== undefined }
+                        {CONSTANTS.skills[skillName]} <span style="color: #46a146">✔</span>
+                    { :else }
+                       {CONSTANTS.skills[skillName]} <span style="color: #d53e3a">⚠</span>
+                    { /if}
+                </label>
                 <input type="text" bind:value={form[skillName]} />
             </div>
         { /each }
@@ -113,8 +163,16 @@
 
     <br/>
     <div style="display: flex; justify-content: space-between">
-        <button style="background: #46a146" on:click={onSavePlayer}>Зберегти зміни</button>&nbsp;&nbsp;&nbsp;&nbsp;
-        <button disabled={isDisabledForm} on:click={()=> players.select(null)}>Завершити редагування</button>
+        <button disabled='{isDisabledForm}'
+                style="background: #46a146"
+                on:click={onSavePlayer}>
+            { #if $players.selected === 'offer' }
+                Додати кандидата в збірну
+            { :else }
+                Зберегти зміни
+            { /if }
+        </button>&nbsp;&nbsp;&nbsp;&nbsp;
+        <button  on:click={()=> players.select(null)}>Завершити редагування</button>
     </div>
 </div>
 

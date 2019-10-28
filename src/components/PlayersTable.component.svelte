@@ -1,21 +1,33 @@
 <script>
     import FIRESTORE from '../firestore';
     import CONSTANTS from '../CONSTANTS';
+    import uuidv1 from 'uuid/v1';
     // Stores
     import players from "../stores/players.store";
     import { user } from "../stores/user.store";
 
+    export let u21;
+    export let offers;
 
-    FIRESTORE.players.get().then((querySnapshot)=> {
-        querySnapshot.forEach((doc)=> {
-            players.add({ ...doc.data(), firebaseId: doc.id });
+    if(!$players.all.length && !offers) {
+        FIRESTORE.players.get().then((querySnapshot)=> {
+            querySnapshot.forEach((doc)=> {
+                players.add({ ...doc.data(), firebaseId: doc.id });
+            });
         });
-    });
+    } else
+    if(!$players.offers.length) {
+        FIRESTORE.offers.get().then((querySnapshot)=> {
+            querySnapshot.forEach((doc)=> {
+                players.addOffer({ ...doc.data(), firebaseId: doc.id });
+            });
+        });
+    }
 
     const formatter = new Intl.NumberFormat("ua", { });
 
     const onPlayerDelete = (player)=> {
-        const isConfirmed = confirm(`Player ${player.name} will be deleted`);
+        const isConfirmed = confirm(`Гравець ${player.name} буде видалений з бази. Ви впевнені?`);
         if(!isConfirmed) return;
 
         FIRESTORE.players.doc(player.firebaseId).delete()
@@ -28,40 +40,78 @@
     };
 
 
+    const onOfferDelete = (player)=> {
+        FIRESTORE.offers.doc(player.firebaseId).delete()
+            .then(function() {
+                players.deleteOffer(player.firebaseId);
+            })
+            .catch(function(error) {
+                alert("Offer delete error: ", error);
+            });
+    };
+
+
     const onPlayerEdit = (player)=> {
         players.select(player.firebaseId);
         window.scrollTo(0, 0)
     };
 
+
+    const onSaveNewPlayer = (player)=> {
+        onPlayerDelete(player); // Delete offer
+
+        const firebaseId = player.firebaseId || uuidv1();
+        const firebasePlayerDoc = FIRESTORE.players.doc(firebaseId);
+
+        firebasePlayerDoc.get().then(doc => {
+            firebasePlayerDoc.set(player)
+                .then(function(p) {
+                    players.add({ ...player, firebaseId });
+                    players.select(null);
+                })
+                .catch(function(error) {
+                    alert("New player save error: ", error);
+                });
+        });
+    };
+
+
+    $: playersList = offers ? $players.offers : $players.all.filter(player => u21 ? player.age <= 21 : player.age > 21);
 </script>
 
 
 <div class="players-table" style="">
 
-    <br/>
-    { #if $user !== null }
+    <h2>{
+        u21 ?
+            'Збірна U-21'
+            :
+            offers ?
+                'Кандидати в збірну'
+                :
+                'Національна збірна'
+    }</h2>
+
+    { #if $user !== null && !offers }
         <button style="background: #46a146" on:click={()=> players.select('new')}>+ Додати гравця</button>&nbsp;&nbsp;&nbsp;&nbsp;
     { /if }
     { #if $user === null }
         <button style="background: #46a146" on:click={()=> players.select('offer')}>+ Запропонувати гравця</button>&nbsp;&nbsp;&nbsp;&nbsp;
     { /if }
 
-    Всього гравців: {$players.all.length}
+    Всього гравців: <span style="color: #ed9c29">{playersList.length}</span>
     <br/>
-
 
 <!--    TODO: Добавить молодежку (просто сортировать в разніх табах) -->
     <div class="players-list-inner">
-        { #each $players.all.sort((a,b)=> a.value > b.value ? -1 : 1) as player (player.firebaseId) }
+        { #each playersList.sort((a,b)=> a.value > b.value ? -1 : 1) as player (player.firebaseId) }
             <div class='{ $players.selected === player.firebaseId ? "player active": "player" }'>
                 <div class="player-inner">
                     <div class="player-info">
                         <a class="player-name"
                            target="_blank"
                            href='{`http://sokker.org/player/PID/${player._id}`}'>{ player.name }, { player.age }</a>
-                        <p>Вартість <span style="color: #46a146">{ formatter.format(player.value || 0) }</span> грн.</p>
-                        <p>Зарплатня <span style="color: #46a146">{ formatter.format(player.wage || 0) }</span> грн.</p>
-                        <p>Тактична дисципліна [&nbsp;<span style="color: #ed9c29">{ player.tactic || 0 }</span>&nbsp;]</p>
+                        <p>Тренує зараз: <span style="color: #46a146">{ CONSTANTS.skills[player.training] || "невідомо" }</span></p>
                         <p>Форма [&nbsp;<span style="color: #ed9c29">{ player.form || 0 }</span>&nbsp;]</p>
                     </div>
                     <div class="player-stats">
@@ -74,8 +124,13 @@
                     </div>
                     { #if $user !== null }
                         <div class="player-actions">
-                            <button on:click={ ()=> onPlayerEdit(player) }>Редагувати</button>
-                            <button style="background:#d53e3a" on:click={()=> onPlayerDelete(player) }>Видалити</button>
+                            { #if offers }
+                                <button style="background: #46a146" on:click={ ()=> onSaveNewPlayer(player) }>Додати</button>
+                                <button style="background:#d53e3a" on:click={()=> onOfferDelete(player) }>Видалити</button>
+                            {:else}
+                                <button on:click={ ()=> onPlayerEdit(player) }>Редагувати</button>
+                                <button style="background:#d53e3a" on:click={()=> onPlayerDelete(player) }>Видалити</button>
+                            { /if }
                         </div>
                     { /if }
                 </div>

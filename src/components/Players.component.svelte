@@ -5,13 +5,15 @@
     import PlayersTable from "./PlayersTable.component.svelte";
     import PlayerDetails from "./PlayerDetails.component.svelte";
 
+    export let u21;
+    export let offers;
 </script>
 
 
 <div class="players">
 
     <div style="padding: 10px;" class='{ $players.selected ? "short" : "long" }'>
-        <PlayersTable />
+        <PlayersTable u21={ u21 } offers={ offers } />
     </div>
 
 
@@ -42,7 +44,7 @@
 
     .player-details-wrapper {
         width: calc(400px);
-        margin: 79px 10px 10px 0;
+        margin: 20px 10px 10px 0;
     }
 
 </style>

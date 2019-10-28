@@ -1,5 +1,5 @@
 <script>
-	import { Router, Link, Route } from "svelte-routing";
+	import { Router, Link, Route, navigate } from "svelte-routing";
 	// Stores
 	import { user } from "./stores/user.store";
 	// Components
@@ -19,6 +19,12 @@
 	});
 
 	export let url = "";
+
+
+	const signOut = ()=> {
+		window.firebase.auth().signOut();
+		navigate("/", { replace: true });
+	}
 </script>
 
 <div class="content">
@@ -26,12 +32,14 @@
 	{#if mounted }
 		<Router url="{url}">
 			<nav>
-				<div><Link to="/">Головна</Link></div>
+				<div><Link to="/">Збірна</Link></div>
+				<div><Link to="/u21">U-21</Link></div>
 				{ #if $user === null }
 					<div><Link to="login">Залогінитись</Link></div>
 				{ /if }
 				{ #if $user !== null }
-					<div><a href="#" on:click={()=> window.firebase.auth().signOut()}>Розлогінитись</a></div>
+					<div><Link to="/offers">Кандидати в збірну</Link></div>
+					<div><a href="" on:click={signOut}>Розлогінитись</a></div>
 				{ /if }
 			</nav>
 
@@ -42,18 +50,14 @@
 			</Route>
 
 			<div style="margin-top: 40px">
-				<Route path="/"><Players /></Route>
+				<Route path="/"><Players u21={false} offers={false} /></Route>
+				<Route path="/u21"><Players u21={true} offers={false} /></Route>
+				{ #if $user !== null }
+					<Route path="/offers"><Players u21={false} offers={true} /></Route>
+				{ /if }
 			</div>
 		</Router>
 	{/if}
-
-<!--	{#if mounted && $user === null }-->
-<!--		<LoginForm />-->
-<!--	{/if}-->
-
-<!--	{#if mounted && $user }-->
-<!--		<Players />-->
-<!--	{/if}-->
 </div>
 
 <!-- white #a3a394 -->
@@ -110,6 +114,12 @@
 
 	:global(button:hover) {
 		opacity: 0.7;
+	}
+
+	:global(button:disabled) {
+		background: #2d2e31;
+		opacity: 0.5;
+		cursor: not-allowed;
 	}
 
 	:global(span) {

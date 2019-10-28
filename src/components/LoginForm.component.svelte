@@ -1,4 +1,5 @@
 <script>
+    import { navigate } from "svelte-routing";
     // Stores
     import { user } from "../stores/user.store";
 
@@ -17,6 +18,7 @@
         window.firebase.auth().signInWithEmailAndPassword(form.email, form.password)
             .then((a)=> {
                 user.signIn(window.firebase.auth().currentUser);
+                navigate("/", { replace: true });
             }).catch((e)=> {
                 errorMsg = e.message;
             });

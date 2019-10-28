@@ -58,7 +58,7 @@
 
 
     const onSaveNewPlayer = (player)=> {
-        onPlayerDelete(player); // Delete offer
+        onOfferDelete(player); // Delete offer
 
         const firebaseId = player.firebaseId || uuidv1();
         const firebasePlayerDoc = FIRESTORE.players.doc(firebaseId);
@@ -66,7 +66,7 @@
         firebasePlayerDoc.get().then(doc => {
             firebasePlayerDoc.set(player)
                 .then(function(p) {
-                    players.add({ ...player, firebaseId });
+                    if($players.all.length) players.add({ ...player, firebaseId }); // If no [length] -> wi will fetch [players.all]
                     players.select(null);
                 })
                 .catch(function(error) {
@@ -112,6 +112,7 @@
                            target="_blank"
                            href='{`http://sokker.org/player/PID/${player._id}`}'>{ player.name }, { player.age }</a>
                         <p>Тренує зараз: <span style="color: #46a146">{ CONSTANTS.skills[player.training] || "невідомо" }</span></p>
+                        <p>Тактична дисципліна [&nbsp;<span style="color: #ed9c29">{ player.tactic || 0 }</span>&nbsp;]</p>
                         <p>Форма [&nbsp;<span style="color: #ed9c29">{ player.form || 0 }</span>&nbsp;]</p>
                     </div>
                     <div class="player-stats">
@@ -141,12 +142,6 @@
 
 
 <style>
-    .players-list {
-        padding: 15px;
-        overflow: auto;
-        height: 100%;
-        box-sizing: border-box;
-    }
 
     .players-list-inner {
         display: flex;

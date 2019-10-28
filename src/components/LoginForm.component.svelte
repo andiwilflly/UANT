@@ -2,6 +2,7 @@
     import { navigate } from "svelte-routing";
     // Stores
     import { user } from "../stores/user.store";
+    import players from "../stores/players.store";
 
     let form = {
         email: '',
@@ -18,6 +19,7 @@
         window.firebase.auth().signInWithEmailAndPassword(form.email, form.password)
             .then((a)=> {
                 user.signIn(window.firebase.auth().currentUser);
+                players.select(null);
                 navigate("/", { replace: true });
             }).catch((e)=> {
                 errorMsg = e.message;

@@ -13,6 +13,7 @@
         "name",
         "country",
         "training",
+        "tactic",
         "_id",
         "age",
         "form",
@@ -26,7 +27,7 @@
         "striker"
     ];
 
-    $: isDisabledForm = !!fieldsNames.find(fieldName => !form[fieldName]);
+    $: isDisabledForm = !!fieldsNames.find(fieldName => fieldName === 'training' ? false : !form[fieldName]);
 
 
     onMount(()=> {
@@ -47,7 +48,7 @@
         firebasePlayerDoc.get().then(doc => {
             firebasePlayerDoc.set(form)
                 .then(function(p) {
-                    if($players.selected === 'offer') alert("Кандидата до збірної успішно додано. Дякуємо за допомогу!");
+                    if($players.selected === 'offer') alert("Кандидата до збірної успішно додано. \n Дякуємо за допомогу! ⚽⚽⚽");
                     if($players.selected === 'offer') return players.select(null); // No history for offer player
 
                     if(doc.exists) {
@@ -73,11 +74,20 @@
 
 
 <div class="player-details">
-    <a class="player-details-name"
-       target="_blank"
-       href='{`http://sokker.org/player/PID/${player._id}`}'>
-        { player.name || 'Новий гравець' }
-    </a>
+    <p style="cursor: pointer; text-decoration: underline;"
+       on:click={()=> players.select(null)}>⬅ Заркрити</p>
+    <br/>
+
+    { #if player.name }
+        <a class="player-details-name"
+           target="_blank"
+           href='{`http://sokker.org/player/PID/${player._id}`}'>
+            { player.name }
+        </a>
+    { :else }
+        <p class="player-details-name">{ $players.selected === 'offer' ? 'Кандидат в збірну' : 'Новий гравець' }</p>
+    { /if }
+
 
     <div class="player-details-form">
         <div style="width: 100%;">
@@ -93,11 +103,7 @@
 
         <div>
             <label for="training">
-                { #if form.training !== '' && form.training !== undefined }
-                    Тренує зараз <span style="color: #46a146">✔</span>
-                { :else }
-                    Тренує зараз <span style="color: #d53e3a">⚠</span>
-                { /if}
+                Тренує зараз
             </label>
             <select bind:value={form.training}>
                 <option value="">&nbsp;</option>
@@ -118,6 +124,7 @@
             </label>
             <input type="text" bind:value={form.name} />
         </div>
+
         <div>
             <label for="name">
                 { #if form.age !== '' && form.age !== undefined }
@@ -137,8 +144,21 @@
                     Форма <span style="color: #d53e3a">⚠</span>
                 { /if}
             </label>
-            <input type="text" bind:value={form.form} />
+            <input type="number" bind:value={form.form} />
         </div>
+
+        <div>
+            <label for="tactic">
+                { #if form.tactic !== '' && form.tactic !== undefined }
+                    Тактична дисципліна <span style="color: #46a146">✔</span>
+                { :else }
+                    Тактична дисципліна <span style="color: #d53e3a">⚠</span>
+                { /if}
+
+            </label>
+            <input type="number" bind:value={form.tactic} />
+        </div>
+
 
         <p style="width: 100%;
                   margin: 10px 0 5px 0;
@@ -156,7 +176,7 @@
                        {CONSTANTS.skills[skillName]} <span style="color: #d53e3a">⚠</span>
                     { /if}
                 </label>
-                <input type="text" bind:value={form[skillName]} />
+                <input type="number" bind:value={form[skillName]} />
             </div>
         { /each }
     </div>
@@ -172,7 +192,6 @@
                 Зберегти зміни
             { /if }
         </button>&nbsp;&nbsp;&nbsp;&nbsp;
-        <button  on:click={()=> players.select(null)}>Завершити редагування</button>
     </div>
 </div>
 

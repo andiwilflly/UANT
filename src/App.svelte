@@ -2,6 +2,7 @@
 	import { Router, Link, Route, navigate } from "svelte-routing";
 	// Stores
 	import { user } from "./stores/user.store";
+	import players from "./stores/players.store";
 	// Components
 	import Players from './components/Players.component.svelte';
 	import LoginForm from './components/LoginForm.component.svelte';
@@ -23,6 +24,7 @@
 
 	const signOut = ()=> {
 		window.firebase.auth().signOut();
+		players.select(null);
 		navigate("/", { replace: true });
 	}
 </script>
@@ -35,11 +37,11 @@
 				<div><Link to="/">Збірна</Link></div>
 				<div><Link to="/u21">U-21</Link></div>
 				{ #if $user === null }
-					<div><Link to="login">Залогінитись</Link></div>
+					<div><Link style="color: #46a146; cursor: pointer; text-decoration: underline;" to="login">Залогінитись</Link></div>
 				{ /if }
 				{ #if $user !== null }
 					<div><Link to="/offers">Кандидати в збірну</Link></div>
-					<div><a href="" on:click={signOut}>Розлогінитись</a></div>
+					<div><p style="color: #d53e3a; cursor: pointer; text-decoration: underline;" on:click={signOut}>Розлогінитись</p></div>
 				{ /if }
 			</nav>
 

@@ -43,7 +43,7 @@
     }
 
     .player-details-wrapper {
-        width: calc(400px);
+        width: 400px;
         margin: 20px 10px 10px 0;
     }
 

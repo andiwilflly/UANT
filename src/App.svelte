@@ -1,4 +1,5 @@
 <script>
+	import { Router, Link, Route } from "svelte-routing";
 	// Stores
 	import { user } from "./stores/user.store";
 	// Components
@@ -16,16 +17,43 @@
 			mounted = true;
 		}
 	});
+
+	export let url = "";
 </script>
 
 <div class="content">
-	{#if mounted && $user === null }
-		<LoginForm />
+
+	{#if mounted }
+		<Router url="{url}">
+			<nav>
+				<div><Link to="/">Головна</Link></div>
+				{ #if $user === null }
+					<div><Link to="login">Залогінитись</Link></div>
+				{ /if }
+				{ #if $user !== null }
+					<div><a href="#" on:click={()=> window.firebase.auth().signOut()}>Розлогінитись</a></div>
+				{ /if }
+			</nav>
+
+			<Route path="login">
+				{ #if $user === null }
+					<LoginForm />
+				{ /if }
+			</Route>
+
+			<div style="margin-top: 40px">
+				<Route path="/"><Players /></Route>
+			</div>
+		</Router>
 	{/if}
 
-	{#if mounted && $user }
-		<Players />
-	{/if}
+<!--	{#if mounted && $user === null }-->
+<!--		<LoginForm />-->
+<!--	{/if}-->
+
+<!--	{#if mounted && $user }-->
+<!--		<Players />-->
+<!--	{/if}-->
 </div>
 
 <!-- white #a3a394 -->
@@ -86,6 +114,23 @@
 
 	:global(span) {
 		color: gray
+	}
+
+	nav {
+		box-shadow: -2px 4px 16px -1px black;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 27px;
+		background: #191c20;
+		z-index: 2;
+		padding: 10px;
+		display: flex;
+	}
+
+	nav > div {
+		margin: 0 10px;
 	}
 
 	.content {

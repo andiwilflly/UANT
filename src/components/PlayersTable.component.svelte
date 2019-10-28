@@ -3,6 +3,7 @@
     import CONSTANTS from '../CONSTANTS';
     // Stores
     import players from "../stores/players.store";
+    import { user } from "../stores/user.store";
 
 
     FIRESTORE.players.get().then((querySnapshot)=> {
@@ -36,10 +37,18 @@
 
 
 <div class="players-table" style="">
-    <button style="background: #46a146" on:click={()=> players.select('new')}>+ Додати гравця</button>&nbsp;&nbsp;&nbsp;&nbsp;
-    <button style="background:#d53e3a" on:click={()=> window.firebase.auth().signOut()}>Розлогінитись</button>
+
     <br/>
+    { #if $user !== null }
+        <button style="background: #46a146" on:click={()=> players.select('new')}>+ Додати гравця</button>&nbsp;&nbsp;&nbsp;&nbsp;
+    { /if }
+    { #if $user === null }
+        <button style="background: #46a146" on:click={()=> players.select('offer')}>+ Запропонувати гравця</button>&nbsp;&nbsp;&nbsp;&nbsp;
+    { /if }
+
+    Всього гравців: {$players.all.length}
     <br/>
+
 
 <!--    TODO: Добавить молодежку (просто сортировать в разніх табах) -->
     <div class="players-list-inner">
@@ -63,10 +72,12 @@
                            </div>
                         { /each }
                     </div>
-                    <div class="player-actions">
-                        <button on:click={ ()=> onPlayerEdit(player) }>Редагувати</button>
-                        <button style="background:#d53e3a" on:click={()=> onPlayerDelete(player) }>Видалити</button>
-                    </div>
+                    { #if $user !== null }
+                        <div class="player-actions">
+                            <button on:click={ ()=> onPlayerEdit(player) }>Редагувати</button>
+                            <button style="background:#d53e3a" on:click={()=> onPlayerDelete(player) }>Видалити</button>
+                        </div>
+                    { /if }
                 </div>
             </div>
         { /each }

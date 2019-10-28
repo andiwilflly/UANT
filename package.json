@@ -16,10 +16,12 @@
   },
   "dependencies": {
     "sirv-cli": "^0.4.4",
+    "svelte-routing": "^1.4.0",
     "uuid": "^3.3.3"
   },
   "scripts": {
     "build": "rollup -c",
+    "deploy": "yarn build && firebase deploy",
     "autobuild": "rollup -c -w",
     "dev": "run-p start:dev autobuild",
     "start": "sirv public --single",

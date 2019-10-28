@@ -1,5 +1,4 @@
 <script>
-    import { fade } from 'svelte/transition';
     // Stores
     import { user } from "../stores/user.store";
 
@@ -24,7 +23,7 @@
     }
 </script>
 
-<div class="login" transition:fade>
+<div class="login">
 
     <div class="logo" />
 

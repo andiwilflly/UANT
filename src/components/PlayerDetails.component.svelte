@@ -17,16 +17,23 @@
         });
     });
 
+
+    const isDisabledForm = ()=> {
+        return Object.values(form)
+    };
+
     const onSavePlayer = ()=> {
         const playerHistory = { ...form, __time: Date.now() };
 
         const firebaseId = player.firebaseId || uuidv1();
-        const firebasePlayerDoc = FIRESTORE.players.doc(firebaseId);
+        const firebasePlayerDoc = FIRESTORE[$players.selected === 'offer' ? 'offers' : 'players'].doc(firebaseId);
         const historyPlayerDoc = FIRESTORE.history.doc(firebaseId);
 
         firebasePlayerDoc.get().then(doc => {
             firebasePlayerDoc.set(form)
                 .then(function(p) {
+                    if($players.selected === 'offer') return players.select(null); // No history for offer player
+
                     if(doc.exists) {
                         players.updatePlayer({ ...form , firebaseId : player.firebaseId });
                     } else {
@@ -53,7 +60,7 @@
     <a class="player-details-name"
        target="_blank"
        href='{`http://sokker.org/player/PID/${player._id}`}'>
-        { player.name || 'New player' }
+        { player.name || 'Новий гравець' }
     </a>
 
     <div class="player-details-form">
@@ -107,7 +114,7 @@
     <br/>
     <div style="display: flex; justify-content: space-between">
         <button style="background: #46a146" on:click={onSavePlayer}>Зберегти зміни</button>&nbsp;&nbsp;&nbsp;&nbsp;
-        <button on:click={()=> players.select(null)}>Завершити редагування</button>
+        <button disabled={isDisabledForm} on:click={()=> players.select(null)}>Завершити редагування</button>
     </div>
 </div>
 

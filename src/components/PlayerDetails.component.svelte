@@ -27,7 +27,7 @@
         "striker"
     ];
 
-    $: isDisabledForm = !!fieldsNames.find(fieldName => fieldName === 'training' ? false : !form[fieldName]);
+    $: isDisabledForm = !!fieldsNames.find(fieldName => fieldName === 'training' ? false : form[fieldName] === undefined);
 
 
     onMount(()=> {

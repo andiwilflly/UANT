@@ -35,7 +35,7 @@
 		<Router url="{url}">
 			<nav>
 				<div><Link to="/">Збірна</Link></div>
-				<div><Link to="/u21">U-21</Link></div>
+				<div><Link to="/u21">Молодіжна збірна</Link></div>
 				{ #if $user === null }
 					<div><Link style="color: #46a146; cursor: pointer; text-decoration: underline;" to="login">Залогінитись</Link></div>
 				{ /if }

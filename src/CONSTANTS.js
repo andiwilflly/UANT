@@ -8,5 +8,12 @@ export default {
         'playmaker': 'півзахист',
         'passing': 'пас',
         'striker': 'напад'
+    },
+
+    translations: {
+        age: 'Вік',
+        name: "Ім'я",
+        tactic: 'Тактична дисципліна',
+        form: "Форма",
     }
 }

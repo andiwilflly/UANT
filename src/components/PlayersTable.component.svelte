@@ -1,4 +1,5 @@
 <script>
+    import Fuse from "fuse.js";
     import FIRESTORE from '../firestore';
     import CONSTANTS from '../CONSTANTS';
     import uuidv1 from 'uuid/v1';
@@ -25,6 +26,12 @@
     }
 
     const formatter = new Intl.NumberFormat("ua", { });
+
+    const filters = {
+        sortBy: 'name',
+        isAsc: false, // desc
+        search: ''
+    };
 
     const onPlayerDelete = (player)=> {
         const isConfirmed = confirm(`Гравець ${player.name} буде видалений з бази. Ви впевнені?`);
@@ -76,7 +83,40 @@
     };
 
 
-    $: playersList = offers ? $players.offers : $players.all.filter(player => u21 ? player.age <= 21 : player.age > 21);
+    const onSortBy = (sortBy = '')=> {
+        filters.isAsc = filters.sortBy === sortBy ? !filters.isAsc : false;
+        filters.sortBy = sortBy;
+    };
+
+
+    const options = {
+        shouldSort: true,
+        threshold: 0.3,
+        location: 0,
+        distance: 100,
+        maxPatternLength: 32,
+        minMatchCharLength: 3,
+        keys: [
+            "name",
+            "training"
+        ]
+    };
+
+
+    $: playersList = (offers ? $players.offers : $players.all.filter(player => u21 ? player.age <= 21 : player.age > 21)).sort((a, b)=> {
+        if(!a[filters.sortBy] || !b[filters.sortBy]) return 0; // No sorting
+        if(typeof +a[filters.sortBy] === 'number') return filters.isAsc ? // Number
+            a[filters.sortBy] > b[filters.sortBy] ? 1 : -1
+            :
+            a[filters.sortBy] > b[filters.sortBy] ? -1 : 1;
+
+        return filters.isAsc ? // String
+            b[filters.sortBy].localeCompare(a[filters.sortBy])
+            :
+            a[filters.sortBy].localeCompare(b[filters.sortBy])
+    });
+
+    $: fuse = new Fuse(playersList, options);
 </script>
 
 
@@ -84,7 +124,7 @@
 
     <h2>{
         u21 ?
-            'Збірна U-21'
+            'Молодіжна збірна'
             :
             offers ?
                 'Кандидати в збірну'
@@ -100,11 +140,33 @@
     { /if }
 
     Всього гравців: <span style="color: #ed9c29">{playersList.length}</span>
+
     <br/>
 
 <!--    TODO: Добавить молодежку (просто сортировать в разніх табах) -->
     <div class="players-list-inner">
-        { #each playersList.sort((a,b)=> a.value > b.value ? -1 : 1) as player (player.firebaseId) }
+        
+        <div class="players-list-filters">
+            { #each ['name', 'age', 'tactic', 'form', ...Object.keys(CONSTANTS.skills)] as name }
+                <button on:click={ ()=> onSortBy(name) }>
+                    { #if filters.sortBy === name }
+                        <span>{ filters.isAsc ? '⬆' : '⬇' }</span>
+                    { /if }
+                    { CONSTANTS.translations[name] || CONSTANTS.skills[name] || name }
+                </button>
+            { /each }
+            <div>
+                <input placeholder="Пошук по імені гравця" type="search" style="width: 300px" bind:value={filters.search}  />
+            </div>
+        </div>
+
+        { #if !(filters.search.length >= 3 ? fuse.search(filters.search) : playersList).length }
+            <div class="player">
+                Гравців не знайдено
+            </div>
+        { /if }
+
+        { #each filters.search.length >= 3 ? fuse.search(filters.search) : playersList as player (player.firebaseId) }
             <div class='{ $players.selected === player.firebaseId ? "player active": "player" }'>
                 <div class="player-inner">
                     <div class="player-info">
@@ -124,7 +186,7 @@
                                 { :else if player[skillName] >= 10 }
                                    <p>[&nbsp;<span style="color: #ed5d1f"> { player[skillName] === undefined ? '' : player[skillName] }</span>&nbsp;]</p>
                                 { :else if player[skillName] <= 5  }
-                                   <p>[&nbsp;<span style="color: #edc24c"> { player[skillName] === undefined ? '' : player[skillName] }</span>&nbsp;]</p>
+                                   <p>[&nbsp;<span style="color: #f9d349"> { player[skillName] === undefined ? '' : player[skillName] }</span>&nbsp;]</p>
                                 { :else }
                                    <p>[&nbsp;<span style="color: #ed9c29"> { player[skillName] === undefined ? '' : player[skillName] }</span>&nbsp;]</p>
                                 { /if }
@@ -155,6 +217,28 @@
     .players-list-inner {
         display: flex;
         flex-wrap: wrap;
+    }
+    
+    .players-list-filters {
+        margin: 10px 0;
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .players-list-filters > button {
+        margin: 0 0 5px 5px;
+        height: 36px;
+        background: #0088cb;
+    }
+
+    .players-list-filters > div {
+        margin: 0 0 0 5px;
+    }
+
+    .players-list-filters span {
+        color: white;
     }
 
     .player {

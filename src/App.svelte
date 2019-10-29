@@ -87,6 +87,14 @@
 		margin: 0;
 	}
 
+	:global(textarea) {
+		font-size: 12px;
+		line-height: 12px;
+		width: 100%;
+		min-height: 100px;
+		outline: none;
+	}
+
 	:global(a) {
 		color: #0088cb !important;
 		text-decoration: underline;

@@ -59,11 +59,11 @@
                     players.select(null);
 
                     // Save player changes to history
-                    historyPlayerDoc.get().then(doc => {
-                        historyPlayerDoc.set({
-                            history: doc.exists ? [...doc.data().history, playerHistory] : [playerHistory]
-                        })
-                    });
+                    // historyPlayerDoc.get().then(doc => {
+                    //     historyPlayerDoc.set({
+                    //         history: doc.exists ? [...doc.data().history, playerHistory] : [playerHistory]
+                    //     })
+                    // });
                 })
                 .catch(function(error) {
                     alert("Player save error: ", error);
@@ -179,6 +179,9 @@
                 <input type="number" bind:value={form[skillName]} />
             </div>
         { /each }
+
+<!--        <label for="notes">Додаткова інформація про гравця <br/>(підтримує HTML теги)</label>-->
+<!--        <textarea bind:value={form.notes}></textarea>-->
     </div>
 
     <br/>

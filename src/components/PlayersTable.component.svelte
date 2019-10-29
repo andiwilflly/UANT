@@ -117,10 +117,18 @@
                     </div>
                     <div class="player-stats">
                         { #each Object.keys(CONSTANTS.skills) as skillName (skillName) }
-                           <div>
-                               <p>{CONSTANTS.skills[skillName]}:</p>
-                               <p>[&nbsp;<span style="color: #ed9c29"> { player[skillName] === undefined ? '' : player[skillName] }</span>&nbsp;]</p>
-                           </div>
+                            <div>
+                                <p>{CONSTANTS.skills[skillName]}:</p>
+                                { #if player[skillName] > 14 }
+                                   <p>[&nbsp;<span style="color: #ed2a2c"> { player[skillName] === undefined ? '' : player[skillName] }</span>&nbsp;]</p>
+                                { :else if player[skillName] >= 10 }
+                                   <p>[&nbsp;<span style="color: #ed5d1f"> { player[skillName] === undefined ? '' : player[skillName] }</span>&nbsp;]</p>
+                                { :else if player[skillName] <= 5  }
+                                   <p>[&nbsp;<span style="color: #edc24c"> { player[skillName] === undefined ? '' : player[skillName] }</span>&nbsp;]</p>
+                                { :else }
+                                   <p>[&nbsp;<span style="color: #ed9c29"> { player[skillName] === undefined ? '' : player[skillName] }</span>&nbsp;]</p>
+                                { /if }
+                            </div>
                         { /each }
                     </div>
                     { #if $user !== null }
@@ -135,6 +143,8 @@
                         </div>
                     { /if }
                 </div>
+
+<!--                <p style="color: #929283; font-size: 11px; margin: 5px 0;">{ @html player.notes || '' }</p>-->
             </div>
         { /each }
     </div>
@@ -142,7 +152,6 @@
 
 
 <style>
-
     .players-list-inner {
         display: flex;
         flex-wrap: wrap;
@@ -170,11 +179,13 @@
 
     .player-info {
         width: 30%;
+        font-size: 15px;
         max-width: 250px;
     }
 
     .player-stats {
         width: 50%;
+        font-size: 15px;
         max-width: 400px;
         display: flex;
         flex-wrap: wrap;

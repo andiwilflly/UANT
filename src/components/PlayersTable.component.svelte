@@ -29,7 +29,7 @@
 
     const filters = {
         sortBy: 'name',
-        isAsc: false, // desc
+        isAsc: true, // desc
         search: ''
     };
 
@@ -97,8 +97,7 @@
         maxPatternLength: 32,
         minMatchCharLength: 3,
         keys: [
-            "name",
-            "training"
+            "name"
         ]
     };
 

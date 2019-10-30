@@ -17,7 +17,7 @@
             });
         });
     } else
-    if(!$players.offers.length) {
+    if(!$players.offers.length && offers) {
         FIRESTORE.offers.get().then((querySnapshot)=> {
             querySnapshot.forEach((doc)=> {
                 players.addOffer({ ...doc.data(), firebaseId: doc.id });
@@ -29,7 +29,7 @@
 
     const filters = {
         sortBy: 'name',
-        isAsc: true, // desc
+        isAsc: false, // desc
         search: ''
     };
 
@@ -104,7 +104,7 @@
 
     $: playersList = (offers ? $players.offers : $players.all.filter(player => u21 ? player.age <= 21 : player.age > 21)).sort((a, b)=> {
         if(!a[filters.sortBy] || !b[filters.sortBy]) return 0; // No sorting
-        if(typeof +a[filters.sortBy] === 'number') return filters.isAsc ? // Number
+        if(!isNaN(+a[filters.sortBy])) return filters.isAsc ? // Number
             a[filters.sortBy] > b[filters.sortBy] ? 1 : -1
             :
             a[filters.sortBy] > b[filters.sortBy] ? -1 : 1;
@@ -144,9 +144,9 @@
 
 <!--    TODO: Добавить молодежку (просто сортировать в разніх табах) -->
     <div class="players-list-inner">
-        
+
         <div class="players-list-filters">
-            { #each ['name', 'age', 'tactic', 'form', ...Object.keys(CONSTANTS.skills)] as name }
+            { #each Object.keys(CONSTANTS.skills) as name }
                 <button on:click={ ()=> onSortBy(name) }>
                     { #if filters.sortBy === name }
                         <span>{ filters.isAsc ? '⬆' : '⬇' }</span>
@@ -154,9 +154,18 @@
                     { CONSTANTS.translations[name] || CONSTANTS.skills[name] || name }
                 </button>
             { /each }
-            <div>
-                <input placeholder="Пошук по імені гравця" type="search" style="width: 300px" bind:value={filters.search}  />
-            </div>
+        </div>
+
+        <div class="players-list-filters">
+            { #each ['name', 'age', 'tactic', 'form'] as name }
+                <button on:click={ ()=> onSortBy(name) }>
+                    { #if filters.sortBy === name }
+                        <span>{ filters.isAsc ? '⬆' : '⬇' }</span>
+                    { /if }
+                    { CONSTANTS.translations[name] || CONSTANTS.skills[name] || name }
+                </button>
+            { /each }
+            &nbsp;<input placeholder="Пошук по імені гравця" type="search" style="width: 300px" bind:value={filters.search}  />
         </div>
 
         { #if !(filters.search.length >= 3 ? fuse.search(filters.search) : playersList).length }
@@ -219,7 +228,7 @@
     }
     
     .players-list-filters {
-        margin: 10px 0;
+        //margin: 10px 0;
         display: flex;
         flex-wrap: wrap;
         width: 100%;

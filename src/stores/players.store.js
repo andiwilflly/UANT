@@ -10,6 +10,11 @@ function Players() {
 
     return {
         subscribe,
+        clearAll: ()=> update(players => ({
+            all: [],
+            offers: [],
+            selected: null
+        })),
         add: (player= {})=> update(players => ({
             all: [...players.all, player],
             offers: players.offers,

@@ -24,7 +24,7 @@
 
 	const signOut = ()=> {
 		window.firebase.auth().signOut();
-		players.select(null);
+		players.clearAll();
 		navigate("/", { replace: true });
 	}
 </script>

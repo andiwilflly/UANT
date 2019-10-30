@@ -44,17 +44,18 @@
         const firebaseId = player.firebaseId || uuidv1();
         const firebasePlayerDoc = FIRESTORE[$players.selected === 'offer' ? 'offers' : 'players'].doc(firebaseId);
         const historyPlayerDoc = FIRESTORE.history.doc(firebaseId);
+        const modified = Date.now();
 
         firebasePlayerDoc.get().then(doc => {
-            firebasePlayerDoc.set(form)
+            firebasePlayerDoc.set({ ...form, modified })
                 .then(function(p) {
                     if($players.selected === 'offer') alert("Кандидата до збірної успішно додано. \n Дякуємо за допомогу! ⚽⚽⚽");
                     if($players.selected === 'offer') return players.select(null); // No history for offer player
 
                     if(doc.exists) {
-                        players.updatePlayer({ ...form , firebaseId : player.firebaseId });
+                        players.updatePlayer({ ...form , firebaseId : player.firebaseId, modified });
                     } else {
-                        players.add({ ...form, firebaseId });
+                        players.add({ ...form, firebaseId, modified });
                     }
                     players.select(null);
 

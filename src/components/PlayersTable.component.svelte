@@ -104,6 +104,7 @@
 
     $: playersList = (offers ? $players.offers : $players.all.filter(player => u21 ? player.age <= 21 : player.age > 21)).sort((a, b)=> {
         if(!a[filters.sortBy] || !b[filters.sortBy]) return 0; // No sorting
+
         if(!isNaN(+a[filters.sortBy])) return filters.isAsc ? // Number
             a[filters.sortBy] > b[filters.sortBy] ? 1 : -1
             :
@@ -157,7 +158,7 @@
         </div>
 
         <div class="players-list-filters">
-            { #each ['name', 'age', 'tactic', 'form'] as name }
+            { #each ['name', 'age', 'tactic', 'form', 'modified'] as name }
                 <button on:click={ ()=> onSortBy(name) }>
                     { #if filters.sortBy === name }
                         <span>{ filters.isAsc ? '⬆' : '⬇' }</span>
@@ -213,6 +214,12 @@
                         </div>
                     { /if }
                 </div>
+
+                { #if !offers }
+                    <div style="float: right;font-size: 12px;">
+                        Востаннє змінений: { player.modified ? new Date(player.modified).toLocaleString() : 'невідомо' }
+                    </div>
+                { /if }
 
 <!--                <p style="color: #929283; font-size: 11px; margin: 5px 0;">{ @html player.notes || '' }</p>-->
             </div>

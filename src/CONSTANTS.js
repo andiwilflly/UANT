@@ -15,5 +15,6 @@ export default {
         name: "Ім'я",
         tactic: 'Тактична дисципліна',
         form: "Форма",
+        modified: "Останні зміни",
     }
 }

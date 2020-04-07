@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount } from 'svelte';
     import uuidv1 from 'uuid/v1';
     import FIRESTORE from '../firestore';
@@ -76,7 +77,7 @@
 
 <div class="player-details">
     <p style="cursor: pointer; text-decoration: underline;"
-       on:click={()=> players.select(null)}>⬅ Заркрити</p>
+       on:click={()=> players.select(null)}>⬅ { $_('close') }</p>
     <br/>
 
     { #if player.name }
@@ -86,7 +87,7 @@
             { player.name }
         </a>
     { :else }
-        <p class="player-details-name">{ $players.selected === 'offer' ? 'Кандидат в збірну' : 'Новий гравець' }</p>
+        <p class="player-details-name">{ $players.selected === 'offer' ? $_('Candidate for the national team') : $_('New player') }</p>
     { /if }
 
 
@@ -104,13 +105,13 @@
 
         <div>
             <label for="training">
-                Тренує зараз
+                { $_('Trains now') }
             </label>
             <select bind:value={form.training}>
                 <option value="">&nbsp;</option>
-                <option value="невідомо">невідомо</option>
+                <option value="невідомо">{ $_('unknown') }</option>
                 { #each Object.keys(CONSTANTS.skills) as skillName (skillName) }
-                    <option value={skillName}>{CONSTANTS.skills[skillName]}</option>
+                    <option value={skillName}>{ $_(CONSTANTS.skills[skillName]) }</option>
                 {/each }
             </select>
         </div>
@@ -118,9 +119,9 @@
         <div style="width: 100%;">
             <label for="name">
                 { #if form.name !== '' && form.name !== undefined }
-                    Ім'я <span style="color: #46a146">✔</span>
+                    { $_('name') } <span style="color: #46a146">✔</span>
                 { :else }
-                    Ім'я <span style="color: #d53e3a">⚠</span>
+                    { $_('name') } <span style="color: #d53e3a">⚠</span>
                 { /if}
             </label>
             <input type="text" bind:value={form.name} />
@@ -129,9 +130,9 @@
         <div>
             <label for="name">
                 { #if form.age !== '' && form.age !== undefined }
-                    Вік <span style="color: #46a146">✔</span>
+                    { $_('age') } <span style="color: #46a146">✔</span>
                 { :else }
-                    Вік <span style="color: #d53e3a">⚠</span>
+                    { $_('age') } <span style="color: #d53e3a">⚠</span>
                 { /if}
             </label>
             <input style="width: 181px" type="number" bind:value={form.age} />
@@ -140,9 +141,9 @@
         <div>
             <label for="name">
                 { #if form.form !== '' && form.form !== undefined }
-                    Форма <span style="color: #46a146">✔</span>
+                    { $_('form') } <span style="color: #46a146">✔</span>
                 { :else }
-                    Форма <span style="color: #d53e3a">⚠</span>
+                    { $_('form') } <span style="color: #d53e3a">⚠</span>
                 { /if}
             </label>
             <input type="number" bind:value={form.form} />
@@ -151,9 +152,9 @@
         <div>
             <label for="tactic">
                 { #if form.tactic !== '' && form.tactic !== undefined }
-                    Тактична дисципліна <span style="color: #46a146">✔</span>
+                    { $_('tactic') } <span style="color: #46a146">✔</span>
                 { :else }
-                    Тактична дисципліна <span style="color: #d53e3a">⚠</span>
+                    { $_('tactic') } <span style="color: #d53e3a">⚠</span>
                 { /if}
 
             </label>
@@ -165,16 +166,16 @@
                   margin: 10px 0 5px 0;
                   color: rgb(237, 156, 41);
                   font-size: 18px;">
-            Навички
+            { $_('Skills') }
         </p>
 
         { #each Object.keys(CONSTANTS.skills) as skillName (skillName) }
             <div>
                 <label for="name">
                     { #if form[skillName] !== '' && form[skillName] !== undefined }
-                        {CONSTANTS.skills[skillName]} <span style="color: #46a146">✔</span>
+                        { $_(CONSTANTS.skills[skillName]) } <span style="color: #46a146">✔</span>
                     { :else }
-                       {CONSTANTS.skills[skillName]} <span style="color: #d53e3a">⚠</span>
+                       { $_(CONSTANTS.skills[skillName]) } <span style="color: #d53e3a">⚠</span>
                     { /if}
                 </label>
                 <input type="number" bind:value={form[skillName]} />
@@ -191,9 +192,9 @@
                 style="background: #46a146"
                 on:click={onSavePlayer}>
             { #if $players.selected === 'offer' }
-                Додати кандидата в збірну
+                { $_('Add a candidate to the national team') }
             { :else }
-                Зберегти зміни
+                { $_('Save changes') }
             { /if }
         </button>&nbsp;&nbsp;&nbsp;&nbsp;
     </div>

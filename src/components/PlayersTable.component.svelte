@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import Fuse from "fuse.js";
     import FIRESTORE from '../firestore';
     import CONSTANTS from '../CONSTANTS';
@@ -124,26 +125,25 @@
 
     <h2>{
         u21 ?
-            'Молодіжна збірна'
+            $_('Youth team')
             :
             offers ?
-                'Кандидати в збірну'
+                $_('Candidates for the national team')
                 :
-                'Національна збірна'
+                $_('National team')
     }</h2>
 
     { #if $user !== null && !offers }
-        <button style="background: #46a146" on:click={()=> players.select('new')}>+ Додати гравця</button>&nbsp;&nbsp;&nbsp;&nbsp;
+        <button style="background: #46a146" on:click={()=> players.select('new')}>+ { $_('Add a player') }</button>&nbsp;&nbsp;&nbsp;&nbsp;
     { /if }
     { #if $user === null }
-        <button style="background: #46a146" on:click={()=> players.select('offer')}>+ Запропонувати гравця</button>&nbsp;&nbsp;&nbsp;&nbsp;
+        <button style="background: #46a146" on:click={()=> players.select('offer')}>+ { $_('Suggest a player') }</button>&nbsp;&nbsp;&nbsp;&nbsp;
     { /if }
 
-    Всього гравців: <span style="color: #ed9c29">{playersList.length}</span>
+    { $_('Total players') }: <span style="color: #ed9c29">{playersList.length}</span>
 
     <br/>
 
-<!--    TODO: Добавить молодежку (просто сортировать в разніх табах) -->
     <div class="players-list-inner">
 
         <div class="players-list-filters">
@@ -152,7 +152,7 @@
                     { #if filters.sortBy === name }
                         <span>{ filters.isAsc ? '⬆' : '⬇' }</span>
                     { /if }
-                    { CONSTANTS.translations[name] || CONSTANTS.skills[name] || name }
+                    { $_(CONSTANTS.translations[name] || CONSTANTS.skills[name] || name) }
                 </button>
             { /each }
         </div>
@@ -163,15 +163,15 @@
                     { #if filters.sortBy === name }
                         <span>{ filters.isAsc ? '⬆' : '⬇' }</span>
                     { /if }
-                    { CONSTANTS.translations[name] || CONSTANTS.skills[name] || name }
+                    { $_(CONSTANTS.translations[name] || CONSTANTS.skills[name] || name) }
                 </button>
             { /each }
-            &nbsp;<input placeholder="Пошук по імені гравця" type="search" style="width: 300px" bind:value={filters.search}  />
+            &nbsp;<input placeholder={ $_("Search by player name") } type="search" style="width: 300px" bind:value={filters.search}  />
         </div>
 
         { #if $players.all.length && (!(filters.search.length >= 3 ? fuse.search(filters.search) : playersList).length) }
             <div class="player">
-                Гравців не знайдено
+                { $_('No players found') }
             </div>
         { /if }
 
@@ -182,14 +182,14 @@
                         <a class="player-name"
                            target="_blank"
                            href='{`http://sokker.org/player/PID/${player._id}`}'>{ player.name }, { player.age }</a>
-                        <p>Тренує зараз: <span style="color: #46a146">{ CONSTANTS.skills[player.training] || "невідомо" }</span></p>
-                        <p>Тактична дисципліна [&nbsp;<span style="color: #ed9c29">{ player.tactic || 0 }</span>&nbsp;]</p>
-                        <p>Форма [&nbsp;<span style="color: #ed9c29">{ player.form || 0 }</span>&nbsp;]</p>
+                        <p>{ $_('Trains now')}: <span style="color: #46a146">{ $_(CONSTANTS.skills[player.training]) || $_('unknown') }</span></p>
+                        <p>{ $_('tactic') } [&nbsp;<span style="color: #ed9c29">{ player.tactic || 0 }</span>&nbsp;]</p>
+                        <p>{ $_('form') } [&nbsp;<span style="color: #ed9c29">{ player.form || 0 }</span>&nbsp;]</p>
                     </div>
                     <div class="player-stats">
                         { #each Object.keys(CONSTANTS.skills) as skillName (skillName) }
                             <div>
-                                <p>{CONSTANTS.skills[skillName]}:</p>
+                                <p>{ $_(CONSTANTS.skills[skillName]) }:</p>
                                 { #if player[skillName] > 14 }
                                    <p>[&nbsp;<span style="color: #ed2a2c"> { player[skillName] === undefined ? '' : player[skillName] }</span>&nbsp;]</p>
                                 { :else if player[skillName] >= 10 }
@@ -205,11 +205,11 @@
                     { #if $user !== null }
                         <div class="player-actions">
                             { #if offers }
-                                <button style="background: #46a146" on:click={ ()=> onSaveNewPlayer(player) }>Додати</button>
-                                <button style="background:#d53e3a" on:click={()=> onOfferDelete(player) }>Видалити</button>
+                                <button style="background: #46a146" on:click={ ()=> onSaveNewPlayer(player) }>{ $_('Add') }</button>
+                                <button style="background:#d53e3a" on:click={()=> onOfferDelete(player) }>{ $_('Remove') }</button>
                             {:else}
-                                <button on:click={ ()=> onPlayerEdit(player) }>Редагувати</button>
-                                <button style="background:#d53e3a" on:click={()=> onPlayerDelete(player) }>Видалити</button>
+                                <button on:click={ ()=> onPlayerEdit(player) }>{ $_('Edit') }</button>
+                                <button style="background:#d53e3a" on:click={()=> onPlayerDelete(player) }>{ $_('Remove') }</button>
                             { /if }
                         </div>
                     { /if }
@@ -218,14 +218,14 @@
                 { #if !offers }
                     <div style="float: right;font-size: 12px;"
                          class='{ (Date.now() - player.modified) / (24 * 60 * 60 * 1000) > 30 ? "orange-text": "" }'>
-                        Востаннє змінений:
+                        { $_("Last modified") }:
                         { player.modified ?
                             (Date.now() - player.modified) / (24 * 60 * 60 * 1000) > 30 ?
-                                new Date(player.modified).toLocaleString() + ' (' +  Math.ceil((Date.now() - player.modified) / (24 * 60 * 60 * 1000)) + ' днів тому)'
+                                new Date(player.modified).toLocaleString() + ' (' +  Math.ceil((Date.now() - player.modified) / (24 * 60 * 60 * 1000)) + ' ' + $_('days ago') + ')'
                                 :
                                 new Date(player.modified).toLocaleString()
                             :
-                            'невідомо' }
+                            $_('unknown') }
                     </div>
                 { /if }
 
@@ -245,7 +245,7 @@
         display: flex;
         flex-wrap: wrap;
     }
-    
+
     .players-list-filters {
         //margin: 10px 0;
         display: flex;

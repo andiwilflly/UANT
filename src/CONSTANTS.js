@@ -1,20 +1,20 @@
 export default {
     skills: {
-        'stamina': 'витривалість',
-        'keeper': 'воротарство',
-        'pace': 'швидкість',
-        'defender': 'захист',
-        'technique': 'техніка',
-        'playmaker': 'півзахист',
-        'passing': 'пас',
-        'striker': 'напад'
+        'stamina': 'stamina',
+        'keeper': 'keeper',
+        'pace': 'pace',
+        'defender': 'defender',
+        'technique': 'technique',
+        'playmaker': 'playmaker',
+        'passing': 'passing',
+        'striker': 'striker'
     },
 
     translations: {
-        age: 'Вік',
-        name: "Ім'я",
-        tactic: 'Тактична дисципліна',
-        form: "Форма",
-        modified: "Останні зміни",
+        age: 'age',
+        name: "name",
+        tactic: 'tactic',
+        form: "form",
+        modified: "modified",
     }
 }

@@ -1,15 +1,17 @@
 <script>
-	import { Router, Link, Route, navigate } from "svelte-routing";
+	import { _, locale, locales } from 'svelte-i18n';
+	import {Router, Link, Route, navigate} from "svelte-routing";
 	// Stores
-	import { user } from "./stores/user.store";
+	import {user} from "./stores/user.store";
 	import players from "./stores/players.store";
+	import language from "./stores/language.store";
 	// Components
 	import Players from './components/Players.component.svelte';
 	import LoginForm from './components/LoginForm.component.svelte';
 
 	let mounted = false;
 
-	firebase.auth().onAuthStateChanged(function(firebaseUser) {
+	firebase.auth().onAuthStateChanged(function (firebaseUser) {
 		if (firebaseUser) {
 			user.signIn(firebaseUser);
 			mounted = true;
@@ -22,10 +24,10 @@
 	export let url = "";
 
 
-	const signOut = ()=> {
+	const signOut = () => {
 		window.firebase.auth().signOut();
 		players.clearAll();
-		navigate("/", { replace: true });
+		navigate("/", {replace: true});
 	}
 </script>
 
@@ -34,15 +36,32 @@
 	{#if mounted }
 		<Router url="{url}">
 			<nav>
-				<div><Link to="/">Збірна</Link></div>
-				<div><Link to="/u21">Молодіжна збірна</Link></div>
-				{ #if $user === null }
-					<div><Link style="color: #46a146; cursor: pointer; text-decoration: underline;" to="login">Залогінитись</Link></div>
-				{ /if }
-				{ #if $user !== null }
-					<div><Link to="/offers">Кандидати в збірну</Link></div>
-					<div><p style="color: #d53e3a; cursor: pointer; text-decoration: underline;" on:click={signOut}>Розлогінитись</p></div>
-				{ /if }
+				<div class="links">
+					<div><Link to="/">{ $_('National team') }</Link></div>
+					<div><Link to="/u21">{ $_('Youth team') }</Link></div>
+					{ #if $user === null }
+						<div>
+							<Link style="color: #46a146; cursor: pointer; text-decoration: underline;" to="login">
+								{ $_('Log in') }
+							</Link>
+						</div>
+					{ /if }
+					{ #if $user !== null }
+						<div><Link to="/offers">{ $_('Candidates for the national team') }</Link></div>
+						<div><p style="color: #d53e3a; cursor: pointer; text-decoration: underline;" on:click={signOut}>{ $_('Log out') }</p></div>
+					{ /if }
+				</div>
+
+				<div>
+					<select value={$language} on:change="{ (e)=> {
+						$locale = e.target.value;
+					 	language.select(e.target.value);
+					} }">
+						{ #each $locales as lang }
+							<option value={ lang }>{ lang }</option>
+						{ /each }
+					</select>
+				</div>
 			</nav>
 
 			<Route path="login">
@@ -74,7 +93,7 @@
 <style>
 	:global(body) {
 		background: #2d2e31;
-		font-family: 'Poppins', sans-serif;
+		font-family: 'Arial', sans-serif;
 		color: #a3a394;
 		font-size: 15px;
 		padding: 0;
@@ -147,11 +166,25 @@
 		z-index: 2;
 		padding: 10px;
 		display: flex;
+		justify-content: space-between;
 	}
 
-	nav > div {
+
+	nav .links {
+		display: flex;
+	}
+
+	nav .links > div {
 		margin: 0 10px;
 	}
+
+	nav select {
+		margin-right: 10px;
+		width: 100px;
+		background: #0d5377;
+		color: whitesmoke;
+	}
+
 
 	.content {
 		background: #191c20;

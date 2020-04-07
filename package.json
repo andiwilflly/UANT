@@ -16,11 +16,13 @@
     "svelte-material-ui": "^1.0.0-beta.15"
   },
   "dependencies": {
+    "@rollup/plugin-json": "^4.0.2",
     "@vitalets/google-translate-api": "^3.0.0",
     "fuse.js": "^3.4.5",
     "google-translate-api": "^2.3.0",
     "querystring": "^0.2.0",
     "sirv-cli": "^0.4.4",
+    "svelte-i18n": "^3.0.3",
     "svelte-routing": "^1.4.0",
     "translate-google": "^1.3.5",
     "uuid": "^3.3.3"

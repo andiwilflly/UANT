@@ -4,6 +4,7 @@
     // Components
     import PlayersTable from "./PlayersTable.component.svelte";
     import PlayerDetails from "./PlayerDetails.component.svelte";
+    // import PlayersParser from "./PlayersParser.component.svelte";
 
     export let u21;
     export let offers;
@@ -13,9 +14,10 @@
 <div class="players">
 
     <div style="padding: 10px;" class='{ $players.selected ? "short" : "long" }'>
+<!--        <PlayersParser />-->
+
         <PlayersTable u21={ u21 } offers={ offers } />
     </div>
-
 
     { #if $players.selected }
         <div class='player-details-wrapper'>

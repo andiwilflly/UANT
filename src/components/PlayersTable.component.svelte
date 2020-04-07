@@ -103,7 +103,7 @@
 
 
     $: playersList = (offers ? $players.offers : $players.all.filter(player => u21 ? player.age <= 21 : player.age > 21)).sort((a, b)=> {
-        if(!a[filters.sortBy] || !b[filters.sortBy]) return 0; // No sorting
+        if(a[filters.sortBy] === undefined || b[filters.sortBy] === undefined) return 0; // No sorting
 
         if(!isNaN(+a[filters.sortBy])) return filters.isAsc ? // Number
             a[filters.sortBy] > b[filters.sortBy] ? 1 : -1
@@ -169,7 +169,7 @@
             &nbsp;<input placeholder="Пошук по імені гравця" type="search" style="width: 300px" bind:value={filters.search}  />
         </div>
 
-        { #if !(filters.search.length >= 3 ? fuse.search(filters.search) : playersList).length }
+        { #if $players.all.length && (!(filters.search.length >= 3 ? fuse.search(filters.search) : playersList).length) }
             <div class="player">
                 Гравців не знайдено
             </div>
@@ -216,8 +216,16 @@
                 </div>
 
                 { #if !offers }
-                    <div style="float: right;font-size: 12px;">
-                        Востаннє змінений: { player.modified ? new Date(player.modified).toLocaleString() : 'невідомо' }
+                    <div style="float: right;font-size: 12px;"
+                         class='{ (Date.now() - player.modified) / (24 * 60 * 60 * 1000) > 30 ? "orange-text": "" }'>
+                        Востаннє змінений:
+                        { player.modified ?
+                            (Date.now() - player.modified) / (24 * 60 * 60 * 1000) > 30 ?
+                                new Date(player.modified).toLocaleString() + ' (' +  Math.ceil((Date.now() - player.modified) / (24 * 60 * 60 * 1000)) + ' днів тому)'
+                                :
+                                new Date(player.modified).toLocaleString()
+                            :
+                            'невідомо' }
                     </div>
                 { /if }
 
@@ -229,6 +237,10 @@
 
 
 <style>
+    .orange-text {
+        color: #ed9c29;
+    }
+
     .players-list-inner {
         display: flex;
         flex-wrap: wrap;
@@ -279,7 +291,7 @@
     .player-info {
         width: 30%;
         font-size: 15px;
-        max-width: 250px;
+        max-width: 280px;
     }
 
     .player-stats {
